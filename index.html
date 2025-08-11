@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Cálculo Financiera - Insights Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        .tab {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #4A90E2;
+            color: #2c5282;
+            background-color: #ffffff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .formula-cell {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .formula-cell .header {
+            font-size: 0.8rem;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .formula-cell .value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .formula-cell .formula {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #2d3748;
+            background-color: #edf2f7;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            display: inline-block;
+            width: 100%;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .sheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800">Hoja de Cálculo Financiera (con Fórmulas)</h1>
+            <p class="mt-2 text-lg text-slate-600">Modelo financiero para Insights Analytics</p>
+        </header>
+
+        <!-- Pestañas de Navegación -->
+        <div class="border-b border-gray-200 bg-gray-100 rounded-t-lg">
+            <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                <button class="tab active" onclick="changeTab(event, 'supuestos')">📝 Supuestos</button>
+                <button class="tab" onclick="changeTab(event, 'flujo')">🌊 Flujo de Caja</button>
+                <button class="tab" onclick="changeTab(event, 'resultados')">📈 Estado de Resultados</button>
+                <button class="tab" onclick="changeTab(event, 'balance')">⚖️ Balance General</button>
+                <button class="tab" onclick="changeTab(event, 'razones')">📊 Razones Financieras</button>
+            </nav>
+        </div>
+
+        <!-- Contenido de las Pestañas -->
+        <div class="bg-white p-6 rounded-b-lg shadow-md">
+            <!-- Pestaña: Supuestos -->
+            <div id="supuestos" class="tab-content active">
+                <h2 class="text-2xl font-bold mb-4">Supuestos y Datos Iniciales</h2>
+                <p class="mb-6 text-gray-600">Esta pestaña contiene todos los datos de entrada. El modelo está vinculado a estas celdas, por lo que si cambias un valor aquí, todos los cálculos se actualizarán.</p>
+                <div class="sheet-grid">
+                    <div class="formula-cell"><div class="header"><span>B1</span><span>Inversión Inicial</span></div><div class="value">36,000,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B2</span><span>Costos Operativos Mensuales</span></div><div class="value">26,500,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B3</span><span>Tasa de Impuestos</span></div><div class="value">35%</div></div>
+                    <div class="formula-cell"><div class="header"><span>B4</span><span>Ingresos Trimestre 1</span></div><div class="value">66,500,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B5</span><span>Ingresos Trimestre 2</span></div><div class="value">86,000,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B6</span><span>Ingresos Trimestre 3</span></div><div class="value">111,000,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B7</span><span>Ingresos Trimestre 4</span></div><div class="value">144,000,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B8</span><span>Activos Fijos (Capitalizados)</span></div><div class="value">24,750,000</div></div>
+                    <div class="formula-cell"><div class="header"><span>B9</span><span>Gastos Pre-operativos (al Gasto)</span></div><div class="value">11,250,000</div></div>
+                </div>
+            </div>
+
+            <!-- Pestaña: Flujo de Caja -->
+            <div id="flujo" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4">Flujo de Caja Proyectado (Año 1)</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100"><tr><th class="p-2">Mes</th><th class="p-2">Ingresos</th><th class="p-2">Egresos Op.</th><th class="p-2">Inversión</th><th class="p-2">Flujo Neto</th><th class="p-2">Flujo Acumulado</th></tr></thead>
+                        <tbody id="cashflow-body">
+                            <!-- El contenido se genera con JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pestaña: Estado de Resultados -->
+            <div id="resultados" class="tab-content">
+                 <h2 class="text-2xl font-bold mb-4">Estado de Resultados Proyectado (Año 1)</h2>
+                 <div class="sheet-grid">
+                    <div class="formula-cell"><div class="header"><span>B2</span><span>Ingresos por Ventas</span></div><div class="value">407,500,000</div><div class="formula">=SUM('Flujo de Caja'!B2:M2)</div></div>
+                    <div class="formula-cell"><div class="header"><span>B3</span><span>Costos y Gastos Totales</span></div><div class="value">329,250,000</div><div class="formula">=SUM('Flujo de Caja'!B3:M3) + Supuestos!B9</div></div>
+                    <div class="formula-cell"><div class="header"><span>B4</span><span>Utilidad Antes de Impuestos (UAI)</span></div><div class="value">78,250,000</div><div class="formula">=B2-B3</div></div>
+                    <div class="formula-cell"><div class="header"><span>B5</span><span>Impuestos (Provisión)</span></div><div class="value">27,387,500</div><div class="formula">=B4*Supuestos!B3</div></div>
+                    <div class="formula-cell"><div class="header"><span>B6</span><span>Utilidad Neta</span></div><div class="value">50,862,500</div><div class="formula">=B4-B5</div></div>
+                 </div>
+            </div>
+
+            <!-- Pestaña: Balance General -->
+            <div id="balance" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4">Balance General (Cierre Año 1)</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-green-700">Activos</h3>
+                        <div class="formula-cell"><div class="header"><span>B2</span><span>Efectivo y Equivalentes</span></div><div class="value">89,500,000</div><div class="formula">='Flujo de Caja'!M7 + Supuestos!B1 - 'Flujo de Caja'!M4</div></div>
+                        <div class="formula-cell"><div class="header"><span>B3</span><span>Activos Fijos</span></div><div class="value">24,750,000</div><div class="formula">=Supuestos!B8</div></div>
+                        <div class="formula-cell bg-green-50"><div class="header"><span>B4</span><span>Total Activos</span></div><div class="value">114,250,000</div><div class="formula">=SUM(B2:B3)</div></div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-red-700">Pasivos y Patrimonio</h3>
+                        <div class="formula-cell"><div class="header"><span>D2</span><span>Impuestos por Pagar</span></div><div class="value">27,387,500</div><div class="formula">='Estado de Resultados'!B5</div></div>
+                        <div class="formula-cell"><div class="header"><span>D3</span><span>Deuda (Fondo Emprender)</span></div><div class="value">36,000,000</div><div class="formula">=Supuestos!B1</div></div>
+                        <div class="formula-cell bg-red-50"><div class="header"><span>D4</span><span>Total Pasivos</span></div><div class="value">63,387,500</div><div class="formula">=SUM(D2:D3)</div></div>
+                        <div class="formula-cell"><div class="header"><span>D5</span><span>Utilidades Retenidas</span></div><div class="value">50,862,500</div><div class="formula">='Estado de Resultados'!B6</div></div>
+                        <div class="formula-cell bg-blue-50"><div class="header"><span>D6</span><span>Total Patrimonio</span></div><div class="value">50,862,500</div><div class="formula">=D5</div></div>
+                        <div class="formula-cell bg-gray-200"><div class="header"><span>D7</span><span>Total Pasivo + Patrimonio</span></div><div class="value">114,250,000</div><div class="formula">=D4+D6</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña: Razones Financieras -->
+            <div id="razones" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4">Análisis de Razones Financieras</h2>
+                 <div class="sheet-grid">
+                    <div class="formula-cell"><div class="header"><span>B2</span><span>Razón Corriente</span></div><div class="value">3.27</div><div class="formula">='Balance General'!B2 / 'Balance General'!D2</div></div>
+                    <div class="formula-cell"><div class="header"><span>B3</span><span>Razón de Endeudamiento</span></div><div class="value">55.5%</div><div class="formula">='Balance General'!D4 / 'Balance General'!B4</div></div>
+                    <div class="formula-cell"><div class="header"><span>B4</span><span>Margen de Utilidad Neta</span></div><div class="value">12.5%</div><div class="formula">='Estado de Resultados'!B6 / 'Estado de Resultados'!B2</div></div>
+                    <div class="formula-cell"><div class="header"><span>B5</span><span>Retorno sobre Activos (ROA)</span></div><div class="value">44.5%</div><div class="formula">='Estado de Resultados'!B6 / 'Balance General'!B4</div></div>
+                    <div class="formula-cell"><div class="header"><span>B6</span><span>Retorno sobre Patrimonio (ROE)</span></div><div class="value">100.0%</div><div class="formula">='Estado de Resultados'!B6 / 'Balance General'!D6</div></div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeTab(event, tabId) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            // Quitar clase activa de todas las pestañas
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            // Mostrar el contenido de la pestaña seleccionada
+            document.getElementById(tabId).classList.add('active');
+            // Marcar la pestaña como activa
+            event.currentTarget.classList.add('active');
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(value);
+        }
+
+        function generateCashFlow() {
+            const body = document.getElementById('cashflow-body');
+            const ingresosTrimestrales = [66500000, 86000000, 111000000, 144000000];
+            const egresosOp = 26500000;
+            const inversion = 36000000;
+            let acumulado = 0;
+            let html = '';
+
+            for (let mes = 1; mes <= 12; mes++) {
+                const trimestre = Math.ceil(mes / 3) - 1;
+                const ingresos = ingresosTrimestrales[trimestre] / 3;
+                const egresosInv = (mes === 1) ? inversion : 0;
+                const flujoNeto = ingresos - egresosOp - egresosInv;
+                acumulado += flujoNeto;
+
+                html += `
+                    <tr class="border-b">
+                        <td class="p-2 font-semibold">${mes}</td>
+                        <td class="p-2">${formatCurrency(ingresos)}</td>
+                        <td class="p-2">${formatCurrency(egresosOp)}</td>
+                        <td class="p-2">${formatCurrency(egresosInv)}</td>
+                        <td class="p-2 ${flujoNeto < 0 ? 'text-red-600' : 'text-green-600'}">${formatCurrency(flujoNeto)}</td>
+                        <td class="p-2 font-medium ${acumulado < 0 ? 'text-red-600' : 'text-green-600'}">${formatCurrency(acumulado)}</td>
+                    </tr>
+                `;
+            }
+            body.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', generateCashFlow);
+    </script>
+
+</body>
+</html>
